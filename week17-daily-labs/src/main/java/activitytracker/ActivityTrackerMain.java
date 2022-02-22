@@ -85,12 +85,12 @@ public class ActivityTrackerMain {
                 Activity activity= new Activity(id,startTime,description,realType);
 
                 return activity;
-
             }
+            throw new IllegalStateException("Did not found!");
         }catch (SQLException se){
             throw new IllegalStateException("Cannot select!",se);
         }
-        throw new IllegalStateException("Should not reach here!");
+
     }
 
 
