@@ -26,11 +26,16 @@ public class Main {
         MovieRepository movieRepository= new MovieRepository(dataSource);
         ActorRepository actorRepository = new ActorRepository(dataSource);
         ActorsMoviesRepository  actorsMoviesRepository=new ActorsMoviesRepository(dataSource);
+        RatingsRepository ratingsRepository= new RatingsRepository(dataSource);
 
         ActorsMoviesService service = new ActorsMoviesService(actorRepository,movieRepository,actorsMoviesRepository);
+        MoviesRatingsService moviesRatingsService=new MoviesRatingsService(movieRepository,ratingsRepository);
 
+        service.insertMoviesWithActors("Pokember",LocalDate.of(1997,12,11), List.of("Leonardo DiCaprio","Gondor"));
         service.insertMoviesWithActors("Titanic",LocalDate.of(1997,12,11), List.of("Leonardo DiCaprio","Kate Winslet"));
 
+        moviesRatingsService.addRatings("Titanic",1L,2L,4L,5L,2L,3L);
+        moviesRatingsService.addRatings("Pokember",1L,2L,5L,5L,5L,5L,4L);
         System.out.println(movieRepository.findAllMovies());
 
 
