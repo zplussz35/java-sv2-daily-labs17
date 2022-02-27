@@ -5,8 +5,9 @@ import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
-public class MovieMain {
+public class Main {
     public static void main(String[] args) {
         MariaDbDataSource dataSource =new MariaDbDataSource();
         try{
@@ -18,15 +19,17 @@ public class MovieMain {
         }
 
         Flyway flyway= Flyway.configure().dataSource(dataSource).load();
-
+        flyway.clean();
         flyway.migrate();
 
 
         MovieRepository movieRepository= new MovieRepository(dataSource);
+        ActorRepository actorRepository = new ActorRepository(dataSource);
+        ActorsMoviesRepository  actorsMoviesRepository=new ActorsMoviesRepository(dataSource);
 
-        movieRepository.saveMovie("Titanic", LocalDate.of(1997,12,11));
-        movieRepository.saveMovie("Pokember", LocalDate.of(2007,12,11));
-        movieRepository.saveMovie("Zombie", LocalDate.of(2018,12,11));
+        ActorsMoviesService service = new ActorsMoviesService(actorRepository,movieRepository,actorsMoviesRepository);
+
+        service.insertMoviesWithActors("Titanic",LocalDate.of(1997,12,11), List.of("Leonardo DiCaprio","Kate Winslet"));
 
         System.out.println(movieRepository.findAllMovies());
 
